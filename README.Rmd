@@ -1,0 +1,72 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+# tidyweb 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+```
+
+```{r, echo = FALSE, results='asis', eval = T}
+
+library(badger)
+
+git_repo <- "benjaminguinaudeau/GermanyCAP"
+
+cat(
+	# badge_code_size(git_repo),
+	# badge_last_commit(git_repo)
+)
+```
+
+This package aims at easing the conversion of data coded according to the German Policy Agenda [codebook]() into data coded according to the master [codebook](https://www.comparativeagendas.net/pages/master-codebook) from the Comparative Agenda Project. 
+
+## Install
+
+```{r, message=FALSE}
+# remotes::install_github("benjaminguinaudeau/GermanyCAP")
+
+library(magrittr) # import pipe %>%
+library(GermanyCAP)
+```
+
+## How to use? 
+
+```{r}
+
+# Generate fake data
+data <- tibble::tibble(
+  doc = letters[1:10], # 10 documents to code
+  minor = c(1910, 1308, 1223, 1608, 1804, 105, 104, 2504, 202, 601) # 10 german subtopic associated with each document
+) %>%
+  dplyr::glimpse()
+```
+
+Please note that the conversion is mono-directional. Topics from the master codebook cannot be converted into German topics. Indeed, while converting, several German subtopics are merged into one single master kategorie, so that it is not possible to traceback the German category given the international category. For instance, the topics on the reunification policy (25XX in the German topic) are coded in 2099 according to the master codebook. Any 25xx topic should therefore get the international code 2099, but there is no way to systematically know which german code should be matched with the international code 2099 (2099, 2501, ... or 2504).
+
+The function **recode_into_master** will take minor topic from the German codebook and return the corresponding minor topic in the international codebook. 
+
+```{r}
+data %>%
+  dplyr::mutate(minor_master = recode_into_master(minor)) %>%
+  dplyr::glimpse()
+```
+
+The package also includes a function able to extract major topic given minor topics. The funtion can be used for any codebook. 
+
+
+```{r}
+data %>%
+  dplyr::mutate(major = extract_major(minor)) %>%
+  dplyr::glimpse()
+
+```
+
