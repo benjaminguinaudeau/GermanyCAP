@@ -45,9 +45,8 @@ recode_into_master <- function(x){
 #' @export
 
 extract_major <- function(minor){
-  tmp <- dplyr::case_when(
+  dplyr::case_when(
     minor == 99 ~ 9900,
     T ~ minor
-  )
-  tmp %/% 100
+  ) %/% 100
 }

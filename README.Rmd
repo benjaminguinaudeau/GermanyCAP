@@ -34,7 +34,7 @@ This package aims at easing the conversion of data coded according to the German
 ```{r, message=FALSE}
 # remotes::install_github("benjaminguinaudeau/GermanyCAP")
 
-library(magrittr) # import pipe %>%
+library(magrittr)
 library(GermanyCAP)
 ```
 
